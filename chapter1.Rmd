@@ -1,17 +1,15 @@
 
 # About the project
 
-*Write a short description about the course and add a link to your GitHub repository here. This is an R Markdown (.Rmd) file so you should use R Markdown syntax.*
+*Great, I have got this far! I feel excited to see what I will learn during the course and especially what I can publish using these tools in future. I found the course via the study program of AGFOREE Doctoral School, and this is a part of my PhD studies.
+
+See my GitHub repository from here: https://github.com/Mikko-Niemi/IODS-project*
 
 ```{r}
-# Fine, I have got this far, oh yeah! I feel very excited what I will learn during the course and especially what I can publish this way in future.
 
-# I found the course via the study program of AGFOREE Doctoral School, and this is a part of my studies - very relevant part, I mean! :-)
-
-# My GitHub repository is located here: https://github.com/Mikko-Niemi/IODS-project
-
+print("It's cloudy weather right now in Helsinki")
 date()
 
 ```
-The text continues here.
+We are going further...
 
