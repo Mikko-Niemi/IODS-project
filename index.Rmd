@@ -1,6 +1,6 @@
 ---
 title: "IODS course project"
-author: "Mikko Niemi"
+author: "Mikko Niemi, University of Helsinki"
 output:
   html_document:
     theme: cosmo

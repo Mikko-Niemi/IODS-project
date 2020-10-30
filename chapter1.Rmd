@@ -1,15 +1,17 @@
 
-# About the project
+### About the project
 
-*Great, I have got this far! I feel excited to see what I will learn during the course and especially what I can publish using these tools in future. I found the course via the study program of AGFOREE Doctoral School, and this is a part of my PhD studies.
+**Wow!!** I am excited to see what I will learn in this course, and especially what I can publish using these tools in future.
+I found the course via the study program of *AGFOREE Doctoral School*, and this is a part of my PhD studies.
 
-See my GitHub repository from here: https://github.com/Mikko-Niemi/IODS-project*
+> [Link to my GitHub repository](https://github.com/Mikko-Niemi/IODS-project)
 
 ```{r}
 
-print("It's cloudy weather right now in Helsinki")
+# I already know R statistics quite well, but the version control and publishing possibilities are interesting.
+# Since the summer is over and weather is changing more rainy, it's good time to learn some coding :-)
 date()
 
 ```
-We are going further...
+So, let's go!
 
