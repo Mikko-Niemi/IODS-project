@@ -1,13 +1,37 @@
-# Insert chapter 2 title here
+# Student's attitude versus exam points on statistics
 
 *Describe the work you have done this week and summarize your learning.*
 
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods.
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using.
+- In this exercise I had a data set describing students' attitudes on statistics, and also their points of a statistics examination.
+- The data contains 7 columns representing students' (1) gender, (2) age, (3) global attitude towards statistics, adjusted indexes on (4) deep approach, (5) strategic approach and (6) surface approach, and (7) exam points. The data contains 166 rows (= observations of different students).
+
+
 
 ```{r}
+
+# Set working directory:
+setwd("C:/Users/mikniemi/OneDrive - University of Helsinki/OpenDataScience/IODS/IODS-project")
+
+# Read the data learning2014.txt:
+learning2014 <- read.table("Data/learning2014.txt", sep="\t", header=TRUE)
+
+# Look at the structure and dimensions of the data:
+str(learning2014)
+dim(learning2014)
+
+# See the head of the data:
+head(learning2014)
+
+# Access the gglot2 library:
+library(ggplot2)
+
+# Draw a plot that describes student's attitude versus exam points
+ggplot(learning2014, aes(x = attitude, y = points, col = gender)) + geom_point()
+
+# Summary of the data
+summary(learning2014)
+
 date()
 ```
 
-Here we go again...
+To be continued next week...
