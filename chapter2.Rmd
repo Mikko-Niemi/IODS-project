@@ -1,37 +1,65 @@
 # Student's attitude versus exam points on statistics
 
-*Describe the work you have done this week and summarize your learning.*
-
-- In this exercise I had a data set describing students' attitudes on statistics, and also their points of a statistics examination.
-- The data contains 7 columns representing students' (1) gender, (2) age, (3) global attitude towards statistics, adjusted indexes on (4) deep approach, (5) strategic approach and (6) surface approach, and (7) exam points. The data contains 166 rows (= observations of different students).
-
-
+- In this exercise I had a data set that described student's attitude on statistics versus student's success at statistics exam.
+- The data contained total **7 variables**: (1) gender, (2) age, (3) global attitude towards statistics, adjusted indexes on (4) deep approach, (5) strategic approach and (6) surface approach, and (7) exam points.
+- The data contained total **166 students**: 110 female and 56 male.
+- Student's attitude towards statistics and exam points correlate significantly, and I managed to make a model that described 20,5 % of the variation of exam points by two variables: student's attitude and strategic approach. See the results and their interpretations below:
 
 ```{r}
-
 # Set working directory:
 setwd("C:/Users/mikniemi/OneDrive - University of Helsinki/OpenDataScience/IODS/IODS-project")
 
-# Read the data learning2014.txt:
+# Read the data called "learning2014.txt":
 learning2014 <- read.table("Data/learning2014.txt", sep="\t", header=TRUE)
 
-# Look at the structure and dimensions of the data:
+# Access necessary libraries:
+library(ggplot2)
+library(GGally)
+
+# Look at the structure of the data:
 str(learning2014)
+
+# And the dimensions:
 dim(learning2014)
 
-# See the head of the data:
-head(learning2014)
+# See 5 first rows of the data:
+head(learning2014, 5)
 
-# Access the gglot2 library:
-library(ggplot2)
-
-# Draw a plot that describes student's attitude versus exam points
+# Look at a plot that describes student's attitude versus exam points:
 ggplot(learning2014, aes(x = attitude, y = points, col = gender)) + geom_point()
 
-# Summary of the data
+# Summary of the data: see the distributions of the variables
+# - There seems the be a positive correlation between the global attitude on statistics and exam points.
 summary(learning2014)
+
+# Exploring the relations between the variables by creating an advanced plot matrix
+ggpairs(learning2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+
+# According to the correlation values, I chose variables *attitude*, *strategic approach* and *surface approach* as explanatory variables for a linear regression model targeting exam points:
+my_model <- lm(points ~ attitude + stra + surf, data = learning2014)
+summary(my_model)
+
+# According to the summary above, attitude has strong significance in the model, but variables "stra" and "surf" have lower significance. Next I tried to exclude variable "surf" (p value 0.466) from the model:
+my_model2 <- lm(points ~ attitude + stra, data = learning2014)
+summary(my_model2)
+
+# The intercept and the variable attitude are clearly significant in the model.
+# Significance of the variable "stra" depends on decision maker's risk level.
+# There is a risk of 9 % that this data was acquired, but exam points do not rely on variable "stra" at all.
+
+# Multiple R-squared means that 20,48 % of the total variation in exam points can be explained by this model.
+# R-squared is always between 0-1, and the higher the value is, the better the model explains variation.
+
+# Plotting residuals versus fitted values, normal QQ-plot and residuals versus leverage:
+par(mfrow = c(2,2))
+plot(my_model2, which = c(1,2,5))
+
+# In linear regression we assume that residuals are normally distributed and the size of the errors do not depend and explanatory variables.
+# The plot of Residuals versus Fitted values shows that there is no trend between these values, which is good.
+# The better points fill in the line of Normal Q-Q plot, the better this fit to the normality assumption of residuals, and in here this works quite well.
+# The plot of Residuals versus Leverage shows how much single observations affect to model parameters and here we see that there is no single observation having extremely strong impact.
 
 date()
 ```
 
-To be continued next week...
+This was a good exercise, and I really learned a lot of these statistical tests. And I am sure that I will take this ggplot2-package for regular use since now I learned how useful it is! :-)
