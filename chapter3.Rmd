@@ -19,7 +19,7 @@ The data contains total 35 variables: both social and school related features. T
 ### Study questions:
 
 Let's examine if there are relationships between high/low alcohol consumption and student's (1) **sex**, (2) **weekly study time**, (3) **extra-curricular activities** and (4) **final grade**.
-- I hypothesize that either sex or study time don't relate on alcohol consumption, but I believe that having extra-curricular activities would decrease alcohol consumption. Also I believe that high-use of alcohol would decrease student's final grade.
+- I hypothesize that either sex or study time don't relate on alcohol consumption, but I believe that having extra-curricular activities would decrease alcohol consumption. Also I believe that high alcohol use would decrease student's final grade.
 
 
 ```{r library, echo=FALSE, warning=FALSE, message=FALSE}
@@ -33,4 +33,4 @@ g1 <- ggplot(alc, aes(x = sex, y = alc_use))
 g1 + geom_boxplot() + ggtitle("Student's sex versus alcohol consumption")
 ```
 
-
+Damn, I went totally wrong here, since according to the figure above male students are consuming significantly more alcohol than female students on average. Let's then explore if weekly study time matters on alcohol use:
