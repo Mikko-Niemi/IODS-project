@@ -1,4 +1,4 @@
-# Student's attitude versus exam points on statistics
+# WEEK 2: Student's attitude versus exam points
 
 - In this exercise I had a data set that described student's attitude on statistics versus student's success at statistics exam.
 - The data contained total **7 variables**: (1) gender, (2) age, (3) global attitude towards statistics, adjusted indexes on (4) deep approach, (5) strategic approach and (6) surface approach, and (7) exam points.

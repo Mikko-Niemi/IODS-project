@@ -1,0 +1,36 @@
+# WEEK 3: Logistic regression
+
+In this exercise I had a data set that included statistics on student's social background, living place, education, alcohol consumption etc. versus student's grades and absences in Mathematics and Portuguese language.
+
+Related study: *P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.*
+
+Web link: [http://www3.dsi.uminho.pt/pcortez/student.pdf]
+
+
+```{r}
+alc <- read.table("Data/alc.txt")
+colnames(alc)
+```
+
+The data contains total 35 variables: both social and school related features. The most interesting variable related to student's performance is 'G3', which is a mean of final year grades of Mathematics and Portuguese language. Attribute 'alc_use' equals to average alcohol consumption, and students having average consumption of higher than 2 were classified as high users (value TRUE at column 'high_use').
+
+
+
+### Study questions:
+
+Let's examine if there are relationships between high/low alcohol consumption and student's (1) **sex**, (2) **weekly study time**, (3) **extra-curricular activities** and (4) **final grade**.
+- I hypothesize that either sex or study time don't relate on alcohol consumption, but I believe that having extra-curricular activities would decrease alcohol consumption. Also I believe that high-use of alcohol would decrease student's final grade.
+
+
+```{r library, echo=FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+
+```{r}
+# Explore relationship between sex and alcohol consumption:
+g1 <- ggplot(alc, aes(x = sex, y = alc_use))
+g1 + geom_boxplot() + ggtitle("Student's sex versus alcohol consumption")
+```
+
+
