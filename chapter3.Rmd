@@ -30,7 +30,27 @@ library(dplyr)
 ```{r}
 # Explore relationship between sex and alcohol consumption:
 g1 <- ggplot(alc, aes(x = sex, y = alc_use))
-g1 + geom_boxplot() + ggtitle("Student's sex versus alcohol consumption")
+g1 + geom_boxplot() + ggtitle("Alcohol consumption related to student's sex") + ylab("Alcohol use")
 ```
 
-Damn, I went totally wrong here, since according to the figure above male students are consuming significantly more alcohol than female students on average. Let's then explore if weekly study time matters on alcohol use:
+Damn, I went totally wrong here, since according to the figure above male students consume significantly more alcohol than female students on average. Let's then explore if weekly study time matters on alcohol use:
+
+```{r, message=FALSE}
+# Explore relationship between weekly study time and alcohol consumption:
+alc %>% group_by(studytime) %>% summarise(count = n(), alcohol = mean(alc_use))
+g2 <- ggplot(alc, aes(x = factor(studytime), y = alc_use))
+g2 + geom_boxplot() + ggtitle("Weekly study time towards alcohol consumption") + ylab("Alcohol use") + xlab("Weekly study time")
+```
+
+The criteria: 1 = <2 hours, 2 = 2 to 5 hours, 3 = 5 to 10 hours, or 4 =- >10 hours.
+
+So, the less they study, the more they drink. Or the more they drink, the less they study? I cannot know if there exists a causal relationship between study time and alcohol consumption, but in any case the figure above points out that on average people using more time for studying are drinking less. How about extra-curricular activities:
+
+```{r}
+# Explore relationship between extra-curricular activities and alcohol consumption:
+g3 <- ggplot(alc, aes(x = activities, y = alc_use, col = sex))
+g3 + geom_boxplot() + ggtitle("Extra-curricular activities versus alcohol consumption") + ylab("Alcohol use") + xlab("Extra-curricular activities")
+```
+
+I hypothesized that having extra-curricular activities would decrease drinking, but this figure is against my thoughts. Either female or male don't have significant difference here. My assumptions have been too bad... The last guess was that alcohol consumption would decrease final grade.
+
