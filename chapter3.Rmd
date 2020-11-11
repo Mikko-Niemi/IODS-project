@@ -75,9 +75,18 @@ In the summary above we see that the intercept of the model is 0.51218, when sex
 Both study time and grade G3 have a negative slope, thus the increase of studying time by one criteria would decrease the probability of high-using by 0.41957 units, and the increase of G3 by one value would decrease the probability of high-using by 0.07127 units.
 Variables sex and study time are clearly significant parts of the model, and variable G3 less significant. However the existence of extra-curricular activities can be dropped out of the model, since there is 28 % percent risk to get the same data without any relationship between high alcohol use and extra-curricular activities.
 
+```{r, message=FALSE}
+# Compute odds ratios (OR)
+OR <- coef(m) %>% exp
 
+# Compute confidence intervals (CI)
+CI <- confint(m) %>% exp
 
+# Print out the odds ratios with their confidence intervals
+cbind(OR, CI)
+```
 
+In the table above I have presented odds ratios and their intervals for different explanatory variables. The odds ratios tell us for example that if student is male, his probability to be alcohol high-user is 2.175 times larger than female students. If odds ratio is less than 1 (like study time), then it's less probable to be high-user. And if value 1 is between the confidence interval (like activities), then there is no significant evidence that having extra-curricular activities would decrease the probability being high-user.
 
 
 
