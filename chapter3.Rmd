@@ -70,3 +70,14 @@ Interesting: Male students who drink a lot, have got significantly lower grades 
 m <- glm(high_use ~ sex + studytime + activities + G3, data = alc, family = "binomial")
 summary(m)
 ```
+
+In the summary above we see that the intercept of the model is 0.51218, when sex is female and student has no extra-curricular activities. If student is male, the intercept increases by 0.77704 units, and if student has extra-curricular activities, the intercept decreases by 0.26007 units.
+Both study time and grade G3 have a negative slope, thus the increase of studying time by one criteria would decrease the probability of high-using by 0.41957 units, and the increase of G3 by one value would decrease the probability of high-using by 0.07127 units.
+Variables sex and study time are clearly significant parts of the model, and variable G3 less significant. However the existence of extra-curricular activities can be dropped out of the model, since there is 28 % percent risk to get the same data without any relationship between high alcohol use and extra-curricular activities.
+
+
+
+
+
+
+
