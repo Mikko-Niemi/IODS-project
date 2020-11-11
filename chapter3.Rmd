@@ -54,3 +54,19 @@ g3 + geom_boxplot() + ggtitle("Extra-curricular activities versus alcohol consum
 
 I hypothesized that having extra-curricular activities would decrease drinking, but this figure is against my thoughts. Either female or male don't have significant difference here. My assumptions have been too bad... The last guess was that alcohol consumption would decrease final grade.
 
+```{r}
+# Explore relationship between final grade and alcohol consumption:
+g4 <- ggplot(alc, aes(x = high_use, y = G3, col = sex))
+g4 + geom_boxplot() + ggtitle("Final grade towards alcohol consumption") + xlab("High use of alcohol") + ylab("Final grade")
+```
+
+Interesting: Male students who drink a lot, have got significantly lower grades than they who are not high-users. But female students have got approximately equal grades whether they are high-users or not. So the combination of sex and final grade might help us to predict high-users by logistic regression.
+
+
+### Logistic regression model:
+
+```{r}
+# Fit logistic regression model m:
+m <- glm(high_use ~ sex + studytime + activities + G3, data = alc, family = "binomial")
+summary(m)
+```
