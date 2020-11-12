@@ -66,9 +66,9 @@ Interesting: Male students who drink a lot, have got significantly lower grades 
 ### Logistic regression model:
 
 ```{r}
-# Fit logistic regression model m:
-m <- glm(high_use ~ sex + studytime + activities + G3, data = alc, family = "binomial")
-summary(m)
+# Fit logistic regression model:
+m1 <- glm(high_use ~ sex + studytime + activities + G3, data = alc, family = "binomial")
+summary(m1)
 ```
 
 In the summary above we see that the intercept of the model is 0.51218, when sex is female and student has no extra-curricular activities. If student is male, the intercept increases by 0.77704 units, and if student has extra-curricular activities, the intercept decreases by 0.26007 units.
@@ -77,16 +77,73 @@ Variables sex and study time are clearly significant parts of the model, and var
 
 ```{r, message=FALSE}
 # Compute odds ratios (OR)
-OR <- coef(m) %>% exp
+OR <- coef(m1) %>% exp
 
 # Compute confidence intervals (CI)
-CI <- confint(m) %>% exp
+CI <- confint(m1) %>% exp
 
 # Print out the odds ratios with their confidence intervals
 cbind(OR, CI)
 ```
 
 In the table above I have presented odds ratios and their intervals for different explanatory variables. The odds ratios tell us for example that if student is male, his probability to be alcohol high-user is 2.175 times larger than female students. If odds ratio is less than 1 (like study time), then it's less probable to be high-user. And if value 1 is between the confidence interval (like activities), then there is no significant evidence that having extra-curricular activities would decrease the probability being high-user.
+
+
+```{r}
+# Fit logistic regression model without non-significant variable activities:
+m2 <- glm(high_use ~ sex + studytime + G3, data = alc, family = "binomial")
+summary(m2)
+```
+
+```{r}
+# Explore the predictive power of the model m2, first predict the probability of high_use:
+probabilities <- predict(m2, type = "response")
+
+# Add the predicted probabilities to 'alc':
+alc <- mutate(alc, probability = probabilities)
+
+# Use the probabilities to make a prediction of high_use:
+alc <- mutate(alc, prediction = probability > 0.5)
+
+# Tabulate the target variable versus the predictions:
+table(high_use = alc$high_use, prediction = alc$prediction) %>% addmargins()
+
+# Tabulate percentages:
+table(high_use = alc$high_use, prediction = alc$prediction) %>% prop.table() %>% addmargins()
+```
+
+Thus, 246/259 not high-users were predicted correctly, but only 20/111 high-users were predicted correctly.
+
+```{r}
+# Initialize a plot of 'high_use' versus 'probability' in 'alc'
+g <- ggplot(alc, aes(x = probability, y = high_use, col = prediction))
+
+# define the geom as points and draw the plot
+g + geom_point()
+```
+
+In the figure above the same phenomena is illustrated. Generally the model underestimates alcohol use, and it doesn't recognize all high-users.
+
+
+```{r}
+# Let's then define a loss function (= mean prediction error)
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+
+# Call loss function to compute the average number of wrong predictions in the (training) data
+loss_func(class = alc$high_use, prob = alc$probability)
+```
+
+```{r}
+# And compare the previous result to a prediction that there would have been zero high-users:
+loss_func(class = alc$high_use, prob = 0)
+```
+
+My model went wrong 28.1 % of times, but a very simple prediction would go wrong 30 % of times. Therefore my predictions were only slightly better.
+Having a real case I should consider testing other explanatory variables too.
+
 
 
 
