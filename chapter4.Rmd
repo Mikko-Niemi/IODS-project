@@ -29,9 +29,80 @@ corrplot(cor_matrix, method="circle", type="upper", cl.pos="b", tl.pos="d", tl.c
 
 Here is the most beautiful illustration of correlation matrix that I have ever seen! You can copy the code above and use it, please! I don't believe the figure needs any explanation, since it's so good... :-)
 
-### Standardizing the data set
+### Standardizing the data and splitting it to train (80 %) and test (20 %) sets
 
+```{r}
+# Center and standardize variables, see the summaries, and change the object to data frame, and remove the dummy variable:
+boston_scaled <- scale(Boston)
+summary(boston_scaled)
+boston_scaled <- as.data.frame(boston_scaled)
 
+# Create a quantile vector of variable 'crim':
+bins <- quantile(boston_scaled$crim)
+bins
 
+# Create a categorical variable 'crime':
+crime <- cut(boston_scaled$crim, breaks = bins, include.lowest = TRUE, label = c("low","med_low","med_high","high"))
 
+# Remove original 'crim' from the dataset:
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+
+# Add the new categorical value 'crime' to scaled data
+boston_scaled <- data.frame(boston_scaled, crime)
+
+# choose randomly 80% of the rows:
+n <- nrow(boston_scaled)
+ind <- sample(n,  size = n * 0.8)
+
+# create train and test sets:
+train <- boston_scaled[ind,]
+test <- boston_scaled[-ind,]
+```
+
+### Fitting the linear discriminant analysis (LDA) on the train set
+
+```{r}
+# Linear discriminant analysis
+lda.fit <- lda(crime ~ ., data = train)
+lda.fit
+
+# The function for LDA biplot arrows
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+
+# Target classes as numeric
+classes <- as.numeric(train$crime)
+
+# Plot the LDA results
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 2)
+```
+
+The biplot above illustrates well that LD1 classifies very well the group having high crime rate, and the variable 'rad' (index of accessibility to radial highways) is extremely important predictor there. LD2 seems to differ clearly between average points of low, med-low and med-high crime rate, but according to this figure they can't be perfectly clustered from each other. That's still a bit mystical picture for me, but let's go further to the prediction part...
+
+### Predicting the crime categories on the test data
+
+```{r}
+# Save the correct classes from test data:
+correct_classes <- test$crime
+
+# Remove the crime variable from test data:
+test <- dplyr::select(test, -crime)
+
+# Predict classes with test data:
+lda.pred <- predict(lda.fit, newdata = test)
+
+# Cross-tabulate the results:
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+Pretty good results in my opinion! High crime rates were well predicted, and also majority of other predictions were correct. In total 63 of 102 predictions (= 62 %) were right. However, since there is one random part included to the model, the result might differ a bit between different runs.
+
+### K-means clustering
 
