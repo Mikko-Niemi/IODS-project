@@ -1,0 +1,37 @@
+# WEEK 4: Clustering and classification
+
+In this exercise I used a data of **Housing Values in Suburbs of Boston** that was freely available in the MASS package. The data contains 506 rows (=different suburbs) and 14 columns (=variables). The variables try to explain different criteria of live quality in Boston suburbs. See the details [here](https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html). 
+
+```{r, message=FALSE, warning=FALSE}
+# Access the necessary tool packages:
+library(MASS)
+library(corrplot)
+library(dplyr)
+
+# Load the Boston data:
+data("Boston")
+
+# Explore the data:
+str(Boston)
+summary(Boston)
+
+# Calculate the correlation matrix and round it:
+cor_matrix <- cor(Boston) %>% round(2)
+cor_matrix
+```
+
+See the summary and the correlation matrix of the data above. For example we can notice that e.g. crime rate varies very much among the suburbs: the highest crime rate is even 89 %. I would also like to highlight large variations at air quality (nox = nitrogen oxides concentration), percent of lower status of the population (lstat), and proportion of blacks by town. Charles River (chas) is the only dummy variable there (= 1 if tract bounds river; 0 otherwise).
+
+```{r}
+# Visualize the correlation matrix:
+corrplot(cor_matrix, method="circle", type="upper", cl.pos="b", tl.pos="d", tl.cex=0.6)
+```
+
+Here is the most beautiful illustration of correlation matrix that I have ever seen! You can copy the code above and use it, please! I don't believe the figure needs any explanation, since it's so good... :-)
+
+### Standardizing the data set
+
+
+
+
+
