@@ -7,6 +7,7 @@ In this exercise I used a data of **Housing Values in Suburbs of Boston** that w
 library(MASS)
 library(corrplot)
 library(dplyr)
+library(ggplot2)
 
 # Load the Boston data:
 data("Boston")
@@ -84,7 +85,7 @@ plot(lda.fit, dimen = 2, col = classes, pch = classes)
 lda.arrows(lda.fit, myscale = 2)
 ```
 
-The biplot above illustrates well that LD1 classifies very well the group having high crime rate, and the variable 'rad' (index of accessibility to radial highways) is extremely important predictor there. LD2 seems to differ clearly between average points of low, med-low and med-high crime rate, but according to this figure they can't be perfectly clustered from each other. That's still a bit mystical picture for me, but let's go further to the prediction part...
+The biplot picture above illustrates well that LD1 classifies very well the group having high crime rate, as the variable 'rad' (index of accessibility to radial highways) is extremely important predictor there. LD2 seems to differ clearly between average points of low, med-low and med-high crime rate, but according to this figure they can't be perfectly clustered from each other. That's still a bit mystical picture for me, but let's go further to the prediction part...
 
 ### Predicting the crime categories on the test data
 
@@ -102,7 +103,46 @@ lda.pred <- predict(lda.fit, newdata = test)
 table(correct = correct_classes, predicted = lda.pred$class)
 ```
 
-Pretty good results in my opinion! High crime rates were well predicted, and also majority of other predictions were correct. In total 63 of 102 predictions (= 62 %) were right. However, since there is one random part included to the model, the result might differ a bit between different runs.
+Pretty good results in my opinion! High crime rates were well predicted, and also majority of other predictions were correct. In total 63 of 102 predictions (= 62 %) were right. However, since there is one random part included in the model, the result might differ a bit between different runs.
 
 ### K-means clustering
+
+```{r}
+# Reload data 'Boston':
+data('Boston')
+
+# Center and standardize variables, see the summaries, and change the object to data frame, and remove the dummy variable:
+boston_scaled <- scale(Boston)
+boston_scaled <- as.data.frame(boston_scaled)
+
+# Calculate Euclidean distance matrix between observations:
+dist_eu <- dist(boston_scaled)
+summary(dist_eu)
+
+# Set seed to remove randomness between different runs:
+set.seed(123)
+
+# Determine the maximum number of clusters:
+k_max <- 8
+
+# Calculate the total within sum of squares:
+twcss <- sapply(1:k_max, function(k){kmeans(Boston, k)$tot.withinss})
+
+# Visualize the results
+qplot(x = 1:k_max, y = twcss, geom = 'line')
+```
+
+The optimal amount of clusters is when the value of total WCSS changes radically. The figure above shows out that in this case good number of clusters is **2**.
+
+```{r}
+# K-means clustering:
+km <-kmeans(Boston, centers = 2)
+
+# Plot the Boston data with clusters (I reduced the number of variables to make the figure readable):
+pairs(Boston[c(5,7,9,12:14)], col = km$cluster)
+```
+
+Well, here it is, the end of this exercise! For the last figure I tried to find a few most interesting variables. Clearly variable 'rad' is the most significant variable here, and it clusters the data well to two clusters. But also we can see that especially variables 'age', 'lstat' and 'medv' can give extra information for clustering process, as the cluster centers are significantly different.
+
+See you next week again! :-)
 
