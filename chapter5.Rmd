@@ -1,0 +1,30 @@
+# WEEK 5: Dimensionality reduction techniques
+
+In this exercise I was using data sets of human development and gender inequality. See the details from [this link](http://hdr.undp.org/en/content/human-development-index-hdi).
+
+```{r, message=FALSE, warning=FALSE}
+# Set working directory:
+setwd("C:/Users/mikniemi/OneDrive - University of Helsinki/OpenDataScience/IODS/IODS-project")
+
+# Access the necessary tool packages:
+library(dplyr)
+library(corrplot)
+library(GGally)
+
+# Load and explore the exercise data:
+human <- read.table("Data/human.txt")
+summary(human)
+ggpairs(human)
+```
+
+There are in total 8 variables explaining human development: 1) **Percentage of females having secondary education**, 2) **Percentage of females being employed**, 3) **Expected years of schooling**, 4) **Expected life**, 5) **The gross national income (GNI) Index**, 6) **Maternal mortality**, 7) **Adolescent birth**, and 8) **Female representation in parliament**. The figure above illustrates correlations between each pair of variables.
+
+```{r}
+# Compute the correlation matrix and visualize it with corrplot:
+cor(human) %>% corrplot(type = "upper", tl.cex=0.6)
+```
+
+This figure presents well, that variables 'Labour.Female' and 'Woman_rep.Parliament' have low correlations with all other variables, but otherwise the variables are correlating with each other quite much.
+
+
+
