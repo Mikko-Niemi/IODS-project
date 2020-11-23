@@ -26,5 +26,48 @@ cor(human) %>% corrplot(type = "upper", tl.cex=0.6)
 
 This figure presents well, that variables 'Labour.Female' and 'Woman_rep.Parliament' have low correlations with all other variables, but otherwise the variables are correlating with each other quite much.
 
+### Principal component analysis (PCA)
+
+```{r}
+# Perform principal component analysis on the not standardized data (SVD method):
+pca_human <- prcomp(human)
+
+# Draw a biplot of the principal component representation and the original variables
+biplot(pca_human, choices = 1:2, cex = c(0.5, 0.6), col = c("grey40", "deeppink2"), sub = "In the non-standardized data variable 'GNI' plays an overemphasized role because its huge scale compared to any other variable", cex.sub = 0.7, cex.axis = 0.8)
+```
+
+```{r}
+# Standardize the variables:
+human_std <- scale(human)
+
+# Perform principal component analysis on the standardized data (SVD method):
+pca_human_std <- prcomp(human_std)
+
+# Draw a biplot of the principal component representation and the original variables:
+biplot(pca_human_std, choices = 1:2, cex = c(0.5, 0.6), col = c("grey40", "deeppink2"), sub = "In the standardized data all the variables are more equal, and we can really utilize their variance for analyses", cex.sub = 0.7, cex.axis = 0.8)
+```
+
+Two figures above shows out how important it is to scale variables before principal component analysis. The latter figure illustrates also well the mutual correlations between some variables, as **in total six original features are contributing on the same dimension**, and therefore we could just pick up one of them to explain most variation of principal component PC1. Just two original features: *female labour and woman reps in parliament*, contribute on the vertical dimension and can explain variation of PC2.
+
+```{r}
+# Calculate summary of principal component analysis:
+s <- summary(pca_human_std)
+
+# Calculate and print out rounded percentages of variance captured by each PC:
+pca_pr <- round(1*s$importance[2, ]*100, digits = 1)
+pca_pr
+```
+
+Wow!! **57.0 % of the variation in the data could be explained by just one principal component**. By two components we could explain 72.6 % of the variation.
+
+```{r}
+# Let's adjust biplot by creating object 'pc_lab' to be used as axis labels:
+pc_lab <- paste0(names(pca_pr), " (", pca_pr, " %)")
+
+# draw a biplot
+biplot(pca_human_std, cex = c(0.5, 0.6), col = c("grey40", "deeppink2"), cex.axis = 0.8, xlab = pc_lab[1], ylab = pc_lab[2])
+```
+
+
 
 
