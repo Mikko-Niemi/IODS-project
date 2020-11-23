@@ -10,6 +10,9 @@ setwd("C:/Users/mikniemi/OneDrive - University of Helsinki/OpenDataScience/IODS/
 library(dplyr)
 library(corrplot)
 library(GGally)
+library(FactoMineR)
+library(ggplot2)
+library(tidyr)
 
 # Load and explore the exercise data:
 human <- read.table("Data/human.txt")
@@ -26,9 +29,9 @@ cor(human) %>% corrplot(type = "upper", tl.cex=0.6)
 
 This figure presents well, that variables 'Labour.Female' and 'Woman_rep.Parliament' have low correlations with all other variables, but otherwise the variables are correlating with each other quite much.
 
-### Principal component analysis (PCA)
+### Principal Component Analysis (PCA) on the human data
 
-```{r}
+```{r, warning=FALSE}
 # Perform principal component analysis on the not standardized data (SVD method):
 pca_human <- prcomp(human)
 
@@ -68,6 +71,40 @@ pc_lab <- paste0(names(pca_pr), " (", pca_pr, " %)")
 biplot(pca_human_std, cex = c(0.5, 0.6), col = c("grey40", "deeppink2"), cex.axis = 0.8, xlab = pc_lab[1], ylab = pc_lab[2])
 ```
 
+
+### Multiple Correspondence Analysis (MCA) on the tea data
+
+In contrast to PCA, in MCA we can use also **discrete variables**, even at *nominal scale*. For this exercise I load data 'tea' from the R package of 'FactoMineR'.
+
+```{r, message=FALSE, warning=FALSE}
+# Load the tea data:
+data("tea")
+
+# Look at the summary and structure of the data:
+summary(tea)
+str(tea)
+
+# Select some variables that I'm interested in:
+keep_columns <- c("Tea", "how", "home", "work", "price", "sex", "Sport", "age_Q")
+tea_selection <- dplyr::select(tea, one_of(keep_columns))
+
+# Visualize the data of the selected columns
+gather(tea_selection) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+
+```{r}
+# Perform Multiple Correspondence Analysis and look at the summary of the model
+mca <- MCA(tea_selection, graph = FALSE)
+summary(mca)
+
+# Visualize MCA
+plot(mca, invisible=c("ind"), habillage = "quali")
+```
+
+The MCA summary tells that 10.7 % of the data variation could be explained by one dimension, 20.1 % by two dimensions, e.g... In total 17 dimensions are needed to cover all the data variation.
+The MCA biplot shows the distances between different properties, and we can see that e.g. features 'p_cheap', '+60' and 'Not.home' are far from any other feature. Otherwise we can also see that e.g. people who use unpacked tea, are also ready to buy tea at upscale price.
+Also we can see how well different dimensions can classify different features: e.g. Earl Grey drinkers can be separated from black and green tea drinkers by using dimension 1, but green and black tea drinkers are more difficult to recognize from each other using these two first dimensions.
 
 
 
