@@ -12,11 +12,11 @@ library(tidyr)
 
 # Load and look at the data set:
 BPRSL <- read.table("Data/BPRSL.txt")
-glimple(BPRSL)
+glimpse(BPRSL)
 
 RATSL <- read.table("Data/RATSL.txt")
 glimpse(RATSL)
-```{r}
+```
 
 
 
