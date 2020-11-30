@@ -1,0 +1,22 @@
+# WEEK 6: Analysis of longitudinal data
+
+Last but not least week! First I read in two data sets that I just wrangled to longitudinal form.
+
+```{r, message=FALSE, warning=FALSE}
+# Set working directory:
+setwd("C:/Users/mikniemi/OneDrive - University of Helsinki/OpenDataScience/IODS/IODS-project")
+
+# Access the necessary tool packages:
+library(dplyr)
+library(tidyr)
+
+# Load and look at the data set:
+BPRSL <- read.table("Data/BPRSL.txt")
+glimple(BPRSL)
+
+RATSL <- read.table("Data/RATSL.txt")
+glimpse(RATSL)
+```{r}
+
+
+
