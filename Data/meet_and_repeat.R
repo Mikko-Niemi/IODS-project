@@ -80,3 +80,5 @@ glimpse(RATSL)
 write.table(BPRSL, file = "BPRSL.txt", sep="\t", row.names=TRUE)
 write.table(RATSL, file = "RATSL.txt", sep="\t", row.names=TRUE)
 
+write.table(BPRS, file = "BPRS.txt", sep="\t", row.names=TRUE)
+write.table(RATS, file = "RATS.txt", sep="\t", row.names=TRUE)
